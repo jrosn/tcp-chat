@@ -24,6 +24,7 @@ def recv_until_end_from(sock):
                 data.append(i)
     return bytes(data)
 
+
 def send_to(sock, data):
     prepared_data = bytearray()
     for i in data:
