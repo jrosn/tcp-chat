@@ -1,5 +1,5 @@
 # tcp-chat
-
+[![Code Climate](https://codeclimate.com/github/rvsosn/tcp-chat/badges/gpa.svg)](https://codeclimate.com/github/rvsosn/tcp-chat)
 ## Использование
 ### Сервер
 ```
