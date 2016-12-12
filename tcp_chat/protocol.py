@@ -5,19 +5,19 @@ STOP_BYTE = 0x26
 
 def recv_until_end_from(sock):
     data = bytearray()
-    finish_recieving = False
+    finish_receiving = False
 
-    while not finish_recieving:
-        recieved_data = sock.recv(BUFFER_SIZE)
+    while not finish_receiving:
+        received_data = sock.recv(BUFFER_SIZE)
 
-        if not recieved_data: break
+        if not received_data: break
 
         is_shielded = False
-        for i in recieved_data:
+        for i in received_data:
             if not is_shielded and i == SHIELDING_BYTE:
                 is_shielded = True
             elif not is_shielded and i == STOP_BYTE:
-                finish_recieving = True
+                finish_receiving = True
                 break
             else:
                 is_shielded = False
