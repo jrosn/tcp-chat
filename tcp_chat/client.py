@@ -1,7 +1,7 @@
 import sys
 import socket
 import select
-from .protocol import send_to, recv_until_end_from
+from .protocol import send_message, recv_until_end_messages
 
 
 class ChatClient(object):
@@ -18,7 +18,7 @@ class ChatClient(object):
 
             for sock in inputs_ready_to_read:
                 if sock == self.server_socket:
-                    data = recv_until_end_from(sock)
+                    data = recv_until_end_messages(sock)
                     if data:
                         print(data.decode())
                     else:
@@ -26,7 +26,7 @@ class ChatClient(object):
                         sys.exit()
                 else:
                     data = sys.stdin.readline()[:-1]
-                    send_to(self.server_socket, data.encode())
+                    send_message(self.server_socket, data.encode())
 
     def start(self):
         self.server_socket.connect((self.host, self.port))

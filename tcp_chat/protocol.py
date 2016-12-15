@@ -3,7 +3,7 @@ SHIELDING_BYTE = 0x25
 STOP_BYTE = 0x26
 
 
-def recv_until_end_from(sock):
+def recv_until_end_messages(sock):
     data = bytearray()
     finish_receiving = False
 
@@ -25,7 +25,7 @@ def recv_until_end_from(sock):
     return bytes(data)
 
 
-def send_to(sock, data):
+def send_message(sock, data):
     prepared_data = bytearray()
     for i in data:
         if i == SHIELDING_BYTE or i == STOP_BYTE:

@@ -4,7 +4,7 @@ import collections
 import socket
 import select
 from logging import info as log_info
-from .protocol import recv_until_end_from, send_to
+from .protocol import recv_until_end_messages, send_message
 
 
 class Client(collections.namedtuple('Client', 'sock addr')):
@@ -32,7 +32,7 @@ class ChatServer(object):
         return clients[0]
 
     def _send_message_to_client(self, client, message):
-        send_to(client.sock, message)
+        send_message(client.sock, message)
 
     def _send_broadcast_message(self, message):
         for client in self.connected_clients:
@@ -41,7 +41,7 @@ class ChatServer(object):
     def _message_handler(self, client, message):
         # <BAD CODE>
         for i in range(str(message).count("conn")):
-            send_to(client.sock, str(self.connected_clients).encode())
+            send_message(client.sock, str(self.connected_clients).encode())
 
         message_without_commands = message.decode().replace('conn', '').encode()
         if message_without_commands:
@@ -64,7 +64,7 @@ class ChatServer(object):
                     log_info("{} connected".format(str(new_client)))
                 else:
                     client = self._get_client_by_sock(sock)
-                    data = recv_until_end_from(client.sock)
+                    data = recv_until_end_messages(client.sock)
                     if not data:
                         self._unregister_and_close_client(client)
                         log_info("{} is offline (initiated by the client)".format(str(client)))
