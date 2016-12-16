@@ -1,8 +1,9 @@
 import sys
 import socket
 import select
-from .protocol import send_message, recv_until_end_messages
 
+from .protocol import send_message, recv_until_end_messages
+from .messages_pb2 import ChatRequest, ChatResponse
 
 class ChatClient(object):
     def __init__(self, host, port):
@@ -19,14 +20,26 @@ class ChatClient(object):
             for sock in inputs_ready_to_read:
                 if sock == self.server_socket:
                     data = recv_until_end_messages(sock)
+
                     if data:
-                        print(data.decode())
+                        response = ChatResponse()
+                        response.ParseFromString(data)
+                        print(response.message)
                     else:
                         print("Disconnected from server")
                         sys.exit()
                 else:
                     data = sys.stdin.readline()[:-1]
-                    send_message(self.server_socket, data.encode())
+
+                    request = ChatRequest()
+                    if data == "conn":
+                        request.command_type = ChatRequest.GET_CLIENTS
+                    else:
+                        request.command_type = ChatRequest.BROADCAST_MSG
+                        request.message = data
+
+                    send_message(self.server_socket, request.SerializeToString())
+
 
     def start(self):
         self.server_socket.connect((self.host, self.port))
