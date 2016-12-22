@@ -24,7 +24,12 @@ class ChatClient(object):
                     if data:
                         response = ChatResponse()
                         response.ParseFromString(data)
-                        print(response.message)
+
+                        if response.HasField("message"):
+                            print(response.message)
+                        else:
+                            print(response.client_ids)
+
                     else:
                         print("Disconnected from server")
                         sys.exit()

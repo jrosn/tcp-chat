@@ -43,6 +43,11 @@ class ChatServer(object):
         for client in self.connected_clients:
             self._send_message_to_client(client, message)
 
+    def _send_connected_clients(self, client):
+        response = ChatResponse()
+        response.client_ids.extend(list(map(lambda x: str(x.id), self.connected_clients)))
+        send_message(client.sock, response.SerializeToString())
+
     def _input_loop(self):
         while True:
             socks_to_read = list(map(lambda x: x.sock, self.connected_clients))
@@ -78,7 +83,7 @@ class ChatServer(object):
                         self._send_broadcast_message(request.message)
                     elif request.command_type == ChatRequest.GET_CLIENTS:
                         client_ids = list(map(lambda x: x.id, self.connected_clients))
-                        self._send_broadcast_message(str(client_ids).encode())
+                        self._send_connected_clients(client)
 
     def start(self):
         self.server_sock.bind((self.host, self.port))

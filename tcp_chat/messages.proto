@@ -8,5 +8,6 @@ message ChatRequest {
 }
 
 message ChatResponse {
-    required string message = 1;
+    optional string message = 2;
+    repeated string client_ids = 3;
 }

@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='messages.proto',
   package='',
-  serialized_pb=_b('\n\x0emessages.proto\"\x81\x01\n\x0b\x43hatRequest\x12.\n\x0c\x63ommand_type\x18\x01 \x02(\x0e\x32\x18.ChatRequest.CommandType\x12\x0f\n\x07message\x18\x02 \x01(\t\"1\n\x0b\x43ommandType\x12\x11\n\rBROADCAST_MSG\x10\x01\x12\x0f\n\x0bGET_CLIENTS\x10\x02\"\x1f\n\x0c\x43hatResponse\x12\x0f\n\x07message\x18\x01 \x02(\t')
+  serialized_pb=_b('\n\x0emessages.proto\"\x81\x01\n\x0b\x43hatRequest\x12.\n\x0c\x63ommand_type\x18\x01 \x02(\x0e\x32\x18.ChatRequest.CommandType\x12\x0f\n\x07message\x18\x02 \x01(\t\"1\n\x0b\x43ommandType\x12\x11\n\rBROADCAST_MSG\x10\x01\x12\x0f\n\x0bGET_CLIENTS\x10\x02\"3\n\x0c\x43hatResponse\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x12\n\nclient_ids\x18\x03 \x03(\t')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -94,8 +94,15 @@ _CHATRESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='message', full_name='ChatResponse.message', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='client_ids', full_name='ChatResponse.client_ids', index=1,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -111,7 +118,7 @@ _CHATRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=150,
-  serialized_end=181,
+  serialized_end=201,
 )
 
 _CHATREQUEST.fields_by_name['command_type'].enum_type = _CHATREQUEST_COMMANDTYPE
