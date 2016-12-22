@@ -1,9 +1,13 @@
 import struct
-
 LEN_STRUCT = struct.Struct('<I') # unsigned int
 
+
 def recv_until_end_messages(sock):
-    received_data_len = LEN_STRUCT.unpack(sock.recv(LEN_STRUCT.size))[0]
+    len_bytes = sock.recv(LEN_STRUCT.size)
+    if len(len_bytes) < LEN_STRUCT.size:
+        return b''
+
+    received_data_len = LEN_STRUCT.unpack(len_bytes)[0]
     received_data = b''
 
     while len(received_data) < received_data_len:
