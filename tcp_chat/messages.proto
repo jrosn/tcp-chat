@@ -1,0 +1,12 @@
+message ChatRequest {
+    enum CommandType {
+        BROADCAST_MSG = 1;
+        GET_CLIENTS = 2;
+    }
+    required CommandType command_type  = 1;
+    optional string message = 2;
+}
+
+message ChatResponse {
+    required string message = 1;
+}

@@ -4,6 +4,8 @@ import collections
 import socket
 import select
 from logging import info as log_info
+
+from .messages_pb2 import ChatRequest, ChatResponse
 from .protocol import recv_until_end_messages, send_message
 
 
@@ -35,18 +37,10 @@ class ChatServer(object):
         send_message(client.sock, message)
 
     def _send_broadcast_message(self, message):
+        response = ChatResponse()
+        response.message = message
         for client in self.connected_clients:
-            self._send_message_to_client(client, message)
-
-    def _message_handler(self, client, message):
-        # <BAD CODE>
-        for i in range(str(message).count("conn")):
-            send_message(client.sock, str(self.connected_clients).encode())
-
-        message_without_commands = message.decode().replace('conn', '').encode()
-        if message_without_commands:
-            self._send_broadcast_message(message_without_commands)
-        # </BAD CODE>
+            self._send_message_to_client(client, response.SerializeToString())
 
     def _input_loop(self):
         while True:
@@ -76,7 +70,12 @@ class ChatServer(object):
                         data=data
                     ))
 
-                    self._message_handler(client, data)
+                    request = ChatRequest()
+                    request.ParseFromString(data)
+                    if request.command_type == ChatRequest.BROADCAST_MSG:
+                        self._send_broadcast_message(request.message)
+                    elif request.command_type == ChatRequest.GET_CLIENTS:
+                        self._send_broadcast_message(str(self.connected_clients).encode())
 
     def start(self):
         self.server_sock.bind((self.host, self.port))
